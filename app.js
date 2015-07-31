@@ -40,6 +40,9 @@
 				for(var i = 0; i < items.length; i++){
 					var item =  items[i];
 					item.hasHighWin = this.hasHighWin.bind(item);
+					item.hasHighStake = this.hasHighStake.bind(item,10);
+					item.hasVeryHighStake = this.hasHighStake.bind(item,30);
+					item.hasBigWin = this.hasBigWin.bind(item,1000);
 				}
 				return items;
 			},
@@ -48,6 +51,16 @@
 				var total = this.items.length;
 				var winTotal = this.items.filter(function(item){return item.win > 0}).length;
 				return (winTotal / total) >= 0.6
+			},
+			hasHighStake: function(multiplier){
+				var totalStake = this.items.reduce(function(prev,current){ return {stake:prev.stake + current.stake}}).stake;
+				var betCount = this.items.length;
+				var avg = totalStake / betCount;
+
+				return this.items.some(function(item){return item.stake >= (avg * multiplier)});
+			},
+			hasBigWin:function(limit){
+				return this.items.some(function(item){return item.toWin > limit;});
 			},
 			groupData: function(key,items){
 				var groupKeys = [];
@@ -75,7 +88,7 @@
 
 			getUnsettledData:function(){
 				//I've put all data in local file to avoid http call which needs app in a server environment.
-				return settledData;
+				return unsettled;
 			}
 		}
 	}
