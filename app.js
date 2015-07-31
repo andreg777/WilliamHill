@@ -23,12 +23,30 @@
 				var settledItems = this.groupData("customer",this.getSettledData());
 				var unsettledItems = this.groupData("customer",this.getUnsettledData());
 
+				this.viewModel.settledItems = this.enrichSettledItems(settledItems);
+				this.viewModel.unsettledItems = this.enrichUnsettledItems(unsettledItems);
 				return this.viewModel;
+			},
+			enrichSettledItems: function(items){
+				for(var item in items){
+					item.hasHighWin = this.hasHighWin.bind(item);
+				}
+			},
+			enrichUnsettledItems:function(items){
+				for(var item in items){
+					item.hasHighWin = this.hasHighWin.bind(item);
+				}
+			},
+			//requirement 1. & 2.1 -- Calc unusually high win rate
+			hasHighWin: function(){
+				var total = this.items.length;
+				var winTotal = this.items.filter(function(item){return item.win > 0}).length;
+				return (winTotal / total) >= 0.6
 			},
 			groupData: function(key,items){
 				var groupKeys = [];
 				for(var item in items){
-					if(groupKeys.contains(item[key] === false){
+					if(groupKeys.indexOf(item[key]) >= 0){
 						item.push(item[key]);
 					}
 				}
@@ -40,7 +58,8 @@
 					results.add(result)
 				}
 				return results;
-			}
+			},
+
 			getSettledData: function(){
 				//I've put all data in local file to avoid http call which needs app in a server environment.
 				return settledData;
