@@ -1,6 +1,8 @@
 /*
-1. only tested in chrome
-2. did the test in javascript / angular
+1. Only tested in chrome
+2. Did the test in javascript / angular
+3. Did not want to include extra libraries for groupBy functions.
+4. Would have been better to instantiate a javascript Customer object and extend the prototype on it but just used normal object.
 */
 (function(){
 
@@ -28,14 +30,18 @@
 				return this.viewModel;
 			},
 			enrichSettledItems: function(items){
-				for(var item in items){
+				for(var i = 0; i < items.length; i++){
+					var item =  items[i];
 					item.hasHighWin = this.hasHighWin.bind(item);
 				}
+				return items;
 			},
 			enrichUnsettledItems:function(items){
-				for(var item in items){
+				for(var i = 0; i < items.length; i++){
+					var item =  items[i];
 					item.hasHighWin = this.hasHighWin.bind(item);
 				}
+				return items;
 			},
 			//requirement 1. & 2.1 -- Calc unusually high win rate
 			hasHighWin: function(){
@@ -45,17 +51,19 @@
 			},
 			groupData: function(key,items){
 				var groupKeys = [];
-				for(var item in items){
-					if(groupKeys.indexOf(item[key]) >= 0){
-						item.push(item[key]);
+				for(var i=0; i < items.length; i++){
+					var item = items[i];
+					if(groupKeys.indexOf(item[key]) === -1){
+						groupKeys.push(item[key]);
 					}
 				}
 
 				var results = [];
-				for(groupKey in groupKeys){
+				for(var i = 0; i < groupKeys.length; i++){
+					var groupKey = groupKeys[i];
 					var groupList = items.filter(function(item){return item[key] === groupKey;});
-					var result = {key: item[key], items: groupList};
-					results.add(result)
+					var result = {key: groupKey, items: groupList};
+					results.push(result)
 				}
 				return results;
 			},
