@@ -10,8 +10,33 @@
 
 <body ng-controller='techTestController'>
 	
-	<script src="libs/angular.js"></script>	
-	<script src="data.js"></script>
-    <script src="app.js"></script>
+	<div class="dataSection">
+		<h1>Settled data</h1>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>customer</th><th>event</th><th>participant</th><th>stake</th><th>win</th>
+				</tr>
+			<thead>
+			<tbody>
+				<tr ng-repeat="settled in viewModel.settledItems">
+					<td ng-bind="settled.customer"/>
+					<td ng-bind="settled.event"/>
+					<td ng-bind="settled.participant"/>
+					<td ng-bind="settled.stake"/>
+					<td ng-bind="settled.win"/>
+				</tr>
+			</tbody>
+		</table>		
+	</div>
+	
+	<div class="dataSection">
+		<h2>Unsettled data</h1>
+	</div>
+	
+	<script type="text/javascript" src="libs/angular.js"></script>	
+    <script type="text/javascript" src="app.js"></script>
+	<script type="text/javascript" src="settled.js"></script>
+	<script type="text/javascript" src="unsettled.js"></script>
 </body>
 </html>
