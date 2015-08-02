@@ -7,8 +7,23 @@ body{
 }
 
 .dataSection{
-	height:50%;
-	overflow:auto;
-	width:75%;
-	margin:0 auto;
+	height:40% !important;
+	overflow:auto !important;
+	width:48% !important;
+	margin-left:0.5%;
+	margin-right:0.5%;
+	display:inline-block !important;
+	padding:1% !important;
+}
+.subSection{
+		height:80% !important;
+		display:inline-block !important;
+		width:45% !important;
+		margin-left:1% !important;
+		margin-right:1% !important;
+		padding:1% !important;
+		vertical-align: top;
+}
+.quarter{
+	width:22% !important;	
 }

@@ -1,9 +1,4 @@
-/*
-1. Only tested in chrome
-2. Did the test in javascript / angular
-3. Did not want to include extra libraries for groupBy functions.
-4. Would have been better to instantiate a javascript Customer object and extend the prototype on it but just used normal object.
-*/
+
 (function(){
 
 	var whApp = angular.module('whApp',[])
@@ -27,6 +22,7 @@
 
 				this.viewModel.settledItems = this.enrichSettledItems(settledItems);
 				this.viewModel.unsettledItems = this.enrichUnsettledItems(unsettledItems);
+
 				return this.viewModel;
 			},
 			enrichSettledItems: function(items){
@@ -49,15 +45,31 @@
 			//requirement 1. & 2.1 -- Calc unusually high win rate
 			hasHighWin: function(){
 				var total = this.items.length;
-				var winTotal = this.items.filter(function(item){return item.win > 0}).length;
+				var winTotal = this.items.filter(function(item){return item.toWin > 0}).length;
 				return (winTotal / total) >= 0.6
 			},
-			hasHighStake: function(multiplier){
-				var totalStake = this.items.reduce(function(prev,current){ return {stake:prev.stake + current.stake}}).stake;
-				var betCount = this.items.length;
-				var avg = totalStake / betCount;
 
-				return this.items.some(function(item){return item.stake >= (avg * multiplier)});
+			hasHighStake: function(multiplier){
+				for(var i = 0; i < this.items.length; i++){
+					var currentItem = this.items[i];
+					var pastItems = this.items.filter(function(item){return item.event < currentItem.event;});
+					var isFirstBet = pastItems.length == 0;
+
+					if(isFirstBet){
+						continue;
+					}
+
+					var totalStake = pastItems.reduce(function(prev,current){ return {stake:prev.stake + current.stake}}).stake;
+					var betCount = pastItems.length >= 1 ? pastItems.length : 1;
+					var avg = totalStake / betCount;
+
+					var hasHighStake = currentItem.stake >= (avg * multiplier);
+
+					if(hasHighStake){
+						return true;
+					}
+				}
+				return false;
 			},
 			hasBigWin:function(limit){
 				return this.items.some(function(item){return item.toWin > limit;});
@@ -76,6 +88,7 @@
 					var groupKey = groupKeys[i];
 					var groupList = items.filter(function(item){return item[key] === groupKey;});
 					var result = {key: groupKey, items: groupList};
+					result[key] = key + ' ' + groupKey;
 					results.push(result)
 				}
 				return results;
@@ -95,4 +108,5 @@
 
 	whApp.controller('techTestController',['$scope','techTestService',techTestController]);
 	whApp.factory('techTestService',techTestService);
+
 }());

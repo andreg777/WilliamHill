@@ -10,10 +10,9 @@
 
 <body ng-controller='techTestController'>
 
-
-	<div class="dataSection">
-		<h1>Settled data</h1>
-
+  <h3>Settled</h3>
+  <hr/>
+	<div class="dataSection form-control">
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
@@ -31,12 +30,28 @@
 		</table>
 	</div>
 
-	<div class="dataSection">
-		<h2>Unsettled data</h1>
+  <div class="dataSection form-control">
+    <div class="subSection">
+      <h3>High rate</h3>
+      <div ng-repeat="settled in viewModel.settledItems">
+          <h4 ng-if="settled.hasHighWin() == true" ng-bind="settled.customer">1</h4>
+      </div>
+    </div>
+    <div class="subSection">
+      <h3>Normal rate</h3>
+      <div ng-repeat="settled in viewModel.settledItems">
+          <h4 ng-if="settled.hasHighWin() == false" ng-bind="settled.customer">1</h4>
+      </div>
+    </div>
+  </div>
+
+  <h3>Unsettled</h3>
+  <hr/>
+	<div class="dataSection form-control">
       <table class="table table-striped table-hover">
         <thead>
           <tr>
-            <th>customer</th><th>Is high winning rate</th><th>Has high stake</th><th>Has very high stake</th><th>Has a big win amount</th>
+            <th>customer</th><th>Is high winning rate</th><th>Has stake >= x10 avg</th><th>Has stake >= 30x avg</th><th>Has win >= $1000 </th>
   				</tr>
   			<thead>
   			<tbody>
@@ -58,10 +73,42 @@
   			</tbody>
       </table>
 	</div>
+  <div class="dataSection form-control">
+    <div class="subSection quarter">
+      <h3>High winning</h3>
+      <div ng-repeat="settled in viewModel.unsettledItems">
+          <h4 ng-if="settled.hasHighWin() == true" ng-bind="settled.customer"></h4>
+      </div>
+    </div>
+    <div class="subSection quarter">
+      <h3>Stake >= X10 avg</h3>
+      <div ng-repeat="settled in viewModel.unsettledItems">
+          <h4 ng-if="settled.hasHighStake() == true" ng-bind="settled.customer"></h4>
+      </div>
+    </div>
+    <div class="subSection quarter">
+      <h3>Stake >= X30 avg</h3>
+      <div ng-repeat="settled in viewModel.unsettledItems">
+          <h4 ng-if="settled.hasVeryHighStake() == true" ng-bind="settled.customer"></h4>
+      </div>
+    </div>
+    <div class="subSection quarter">
+      <h3>Win >= $1000</h3>
+      <div ng-repeat="settled in viewModel.unsettledItems">
+          <h4 ng-if="settled.hasBigWin() == true" ng-bind="settled.customer"></h4>
+      </div>
+    </div>
+  </div>
 
-	<script type="text/javascript" src="libs/angular.js"></script>
+  <script type="text/javascript" src="libs/jasmine/jasmine.js"></script>
+  <script type="text/javascript" src="libs/jasmine/jasmine-html.js"></script>
+  <script type="text/javascript" src="libs/jasmine/boot.js"></script>
+
+  <script type="text/javascript" src="libs/angular.js"></script>
+
   <script type="text/javascript" src="app.js"></script>
 	<script type="text/javascript" src="settled.js"></script>
 	<script type="text/javascript" src="unsettled.js"></script>
+
 </body>
 </html>
