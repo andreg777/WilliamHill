@@ -37,7 +37,13 @@ describe('techTestcontroller',function(){
      });
 
      it('customer 6 has high win',function(){
-               expect(_viewModel.unsettledItems.filter(function(item){return item.hasHighWin()})[5].key).toBe(6);
+          expect(_viewModel.unsettledItems.filter(function(item){return item.hasHighWin()})[5].key).toBe(6);
      });
 
+
+     it('customer 4 has high win',function(){
+       var highWins = _viewModel.unsettledItems.filter(function(item){return item.hasHighWin() && item.key == 4});
+  
+       expect(highWins[0].key).toBe(4);
+     })
   });
