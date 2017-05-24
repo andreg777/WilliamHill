@@ -42,53 +42,56 @@ namespace ConsoleApplication14
 
                 if (amount >= Significance.Billion)
                 {
-                    numericText = ConvertNumericToText(amount / Significance.Billion) + " Billion ";
+                    numericText += ConvertNumericToText(amount / Significance.Billion) + " Billion ";
                     amount = amount % Significance.Billion;
                 }
 
                 if (amount >= Significance.Million)
                 {
-                    numericText = ConvertNumericToText(amount / Significance.Million) + " Million";
+                    numericText += ConvertNumericToText(amount / Significance.Million) + " Million";
                     amount = amount % Significance.Million;
                 }
 
                 if (amount >= Significance.Thousand)
                 {
-                    numericText = ConvertNumericToText(amount / Significance.Million) + " Thousand ";
+                    numericText += ConvertNumericToText(amount / Significance.Million) + " Thousand ";
                     amount = amount % Significance.Thousand;
                 }
 
                 if (amount >= Significance.Hundred)
                 {
-                    numericText = ConvertNumericToText(amount / Significance.Hundred) + " Hundred ";
+                    numericText += ConvertNumericToText(amount / Significance.Hundred) + " Hundred ";
                     amount = amount % Significance.Hundred;
                 }
-
-                if (amount >= 20)
+               
+                if (amount < Significance.Hundred)
                 {
-
+                    numericText += NumberToText((int)Math.Floor(amount));    
                 }
-
-                numericText = NumberToText((int)Math.Floor(amount));
-
+                
                 return numericText;
-            }                        
+            }
 
             private string NumberToText(int amount)
             {
                 var result = "";
+                
+                if (amount >= 20)
+                {                    
+                    result = DecDictionary[amount - amount % 10];
+                    
+                    amount = amount % 10;
 
-                if (amount >= 11)
+                    result += " " + UnitDictionary[amount];
+                }else if (amount >= 11)
                 {
-                    return TeenDictionary[amount];    
+                    result += TeenDictionary[amount];
+                } else if (amount >= 0)
+                {
+                    result += UnitDictionary[amount];
                 }
 
-                if (amount >= 0)
-                {
-                    return UnitDictionary[amount];
-                }
-
-                return string.Empty;
+                return result;
             }
         }
     }
